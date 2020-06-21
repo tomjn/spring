@@ -33,12 +33,18 @@ jobs:
           libboost-program-options-dev libboost-signals-dev libopenal-dev 
           libboost-chrono-dev libboost-filesystem-dev libunwind8-dev 
           default-jdk libcurl4-gnutls-dev
-      - name: Setup cross-compile folders
-        run: mkdir -p ~/spring-xcompile/win64 ~/spring-xcompile/linux
+      #- name: Setup cross-compile folders
+      #  run: mkdir -p ~/spring-xcompile/win64 ~/spring-xcompile/linux
+      - uses: actions/cache@v2
+        id: cache
+        with:
+          path: '${{ github.workspace }}/ghbuild'
+          key: ${{ runner.os }}-${{ github.ref }}
       - name: Run CMake
         uses: lukka/run-cmake@v2
         id: runcmake
         with:
+          buildDirectory: '${{ github.workspace }}/ghbuild'
           cmakeGenerator: 'UnixMakefiles'
           cmakeListsOrSettingsJson: 'CMakeListsTxtAdvanced'
           cmakeListsTxtPath: '${{ github.workspace }}/CMakeLists.txt'
@@ -52,4 +58,4 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: build folder
-          path: "${{ github.workspace }}/../../_temp" # or path/to/artifact
+          path: '${{ github.workspace }}/ghbuild' # or path/to/artifact ${{ github.workspace }}/../..
