@@ -17,10 +17,8 @@ jobs:
           persist-credentials: false
       - name: Checkout submodules
         uses: textbook/git-checkout-submodule-action@master
-      - name: Installing pre-build packages
-        run: sudo apt-get install build-essential make cmake p7zip-full git
-      - name: Apt Update
-        run: sudo apt-get update
+      #- name: Apt Update
+      #  run: sudo apt-get update
       # - name: Add Mingw-64 Apt Repo
       #   run: sudo add-apt-repository ppa:tobydox/mingw-x-trusty
       # - name: Install Mingw dependencies
