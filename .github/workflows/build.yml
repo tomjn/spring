@@ -19,12 +19,12 @@ jobs:
         run: sudo apt-get install build-essential cmake git
       - name: Apt Update
         run: sudo apt-get update
-      - name: Add Mingw-64 Apt Repo
-        run: sudo add-apt-repository ppa:tobydox/mingw-x-trusty
-      - name: Install Mingw dependencies
-        run: >
-          sudo apt-get install mingw-x-binutils mingw-x-gcc
-          mingw-x-runtime mingw-x-w32api
+      # - name: Add Mingw-64 Apt Repo
+      #   run: sudo add-apt-repository ppa:tobydox/mingw-x-trusty
+      # - name: Install Mingw dependencies
+      #   run: >
+      #     sudo apt-get install mingw-x-binutils mingw-x-gcc
+      #     mingw-x-runtime mingw-x-w32api
       - name: Install build dependencies
         run: >
           sudo apt-get install libogg-dev libvorbis-dev libfreetype6-dev 
