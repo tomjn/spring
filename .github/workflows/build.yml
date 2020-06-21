@@ -20,7 +20,7 @@ jobs:
       - name: Apt Update
         run: sudo apt-get update
       - name: Add Mingw-64 Apt Repo
-        run: sudo add-apt-repository ppa:tobydox/mingw-w64
+        run: sudo add-apt-repository ppa:tobydox/mingw-x-trusty
       - name: Install Mingw dependencies
         run: >
           sudo apt-get install mingw-x-binutils mingw-x-gcc
