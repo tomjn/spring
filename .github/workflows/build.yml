@@ -37,7 +37,14 @@ jobs:
           default-jdk libcurl4-gnutls-dev
       - name: Setup cross-compile folders
         run: mkdir -p ~/spring-xcompile/win64 ~/spring-xcompile/linux
-      - name: CMake
-        run: cmake .
-      - name: Make Engine
-        run: make spring
+      - name: Run CMake+Ninja without triplet
+        uses: lukka/run-cmake@v2
+        id: runcmake
+        with:
+          cmakeGenerator: 'Ninja'
+          cmakeListsOrSettingsJson: 'CMakeListsTxtBasic'
+          cmakeListsTxtPath: '${{ github.workspace }}/CMakeLists.txt'
+#      - name: CMake
+#        run: cmake .
+#      - name: Make Engine
+#        run: make spring
