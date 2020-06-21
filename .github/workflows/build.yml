@@ -19,12 +19,12 @@ jobs:
         run: sudo apt-get install build-essential cmake git
       - name: Apt Update
         run: sudo apt-get update
-      - name: Add Mingw Apt Repo
-        run: sudo add-apt-repository ppa:tobydox/mingw
+      - name: Add Mingw-64 Apt Repo
+        run: sudo add-apt-repository ppa:tobydox/mingw-w64
       - name: Install Mingw dependencies
         run: >
-          sudo apt-get install mingw32-x-binutils mingw32-x-gcc
-          mingw32-x-runtime mingw-x-w32api
+          sudo apt-get install mingw64-x-binutils mingw64-x-gcc
+          mingw64-x-runtime mingw-x-w32api
       - name: Install build dependencies
         run: >
           sudo apt-get install libogg-dev libvorbis-dev libfreetype6-dev 
@@ -33,7 +33,7 @@ jobs:
           libboost-chrono-dev libboost-filesystem-dev libunwind8-dev default-jdk 
           libcurl4-gnutls-dev
       - name: Setup cross-compile folders
-        run: mkdir -p ~/spring-xcompile/win32 ~/spring-xcompile/win64 ~/spring-xcompile/linux
+        run: mkdir -p ~/spring-xcompile/win64 ~/spring-xcompile/linux
       - name: CMake
         run: cmake .
       - name: Make Engine
