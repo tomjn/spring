@@ -17,8 +17,8 @@ jobs:
           persist-credentials: false
       - name: Checkout submodules
         uses: textbook/git-checkout-submodule-action@master
-      - name: Install cmake git and build-essential
-        run: sudo apt-get install build-essential cmake git
+      - name: Installing pre-build packages
+        run: sudo apt-get install build-essential make cmake p7zip-full ninja-build git
       - name: Apt Update
         run: sudo apt-get update
       # - name: Add Mingw-64 Apt Repo
@@ -44,6 +44,7 @@ jobs:
           cmakeGenerator: 'Ninja'
           cmakeListsOrSettingsJson: 'CMakeListsTxtBasic'
           cmakeListsTxtPath: '${{ github.workspace }}/CMakeLists.txt'
+          useShell: bash
 #      - name: CMake
 #        run: cmake .
 #      - name: Make Engine
