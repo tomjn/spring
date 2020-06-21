@@ -35,7 +35,7 @@ jobs:
           default-jdk libcurl4-gnutls-dev
       - name: Setup cross-compile folders
         run: mkdir -p ~/spring-xcompile/win64 ~/spring-xcompile/linux
-      - name: Run CMake+Ninja without triplet
+      - name: Run CMake
         uses: lukka/run-cmake@v2
         id: runcmake
         with:
@@ -49,3 +49,7 @@ jobs:
       - name: Make Engine
         run: "make spring"
         working-directory: "${{ github.workspace }}/../../_temp"
+      - uses: actions/upload-artifact@v2
+        with:
+          name: build folder
+          path: "${{ github.workspace }}/../../_temp" # or path/to/artifact
