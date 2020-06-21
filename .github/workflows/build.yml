@@ -23,8 +23,8 @@ jobs:
         run: sudo add-apt-repository ppa:tobydox/mingw-w64
       - name: Install Mingw dependencies
         run: >
-          sudo apt-get install mingw64-x-binutils mingw64-x-gcc
-          mingw64-x-runtime mingw-x-w32api
+          sudo apt-get install mingw-x-binutils mingw-x-gcc
+          mingw-x-runtime mingw-x-w32api
       - name: Install build dependencies
         run: >
           sudo apt-get install libogg-dev libvorbis-dev libfreetype6-dev 
