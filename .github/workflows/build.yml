@@ -27,10 +27,10 @@ jobs:
       #     mingw-x-runtime mingw-x-w32api
       - name: Install build dependencies
         run: >
-          sudo apt-get install libglew-dev libsdl2-dev libdevil-dev libopenal-dev 
+          sudo apt-get install --fix-missing libglew-dev libsdl2-dev libdevil-dev 
           libogg-dev libvorbis-dev libfreetype6-dev p7zip-full libxcursor-dev 
           libboost-thread-dev libboost-regex-dev libboost-system-dev 
-          libboost-program-options-dev libboost-signals-dev 
+          libboost-program-options-dev libboost-signals-dev libopenal-dev 
           libboost-chrono-dev libboost-filesystem-dev libunwind8-dev 
           default-jdk libcurl4-gnutls-dev
       - name: Setup cross-compile folders
