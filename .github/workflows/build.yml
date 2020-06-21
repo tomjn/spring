@@ -18,7 +18,7 @@ jobs:
       - name: Checkout submodules
         uses: textbook/git-checkout-submodule-action@master
       - name: Installing pre-build packages
-        run: sudo apt-get install build-essential make cmake p7zip-full ninja-build git
+        run: sudo apt-get install build-essential make cmake p7zip-full git
       - name: Apt Update
         run: sudo apt-get update
       # - name: Add Mingw-64 Apt Repo
@@ -41,11 +41,12 @@ jobs:
         uses: lukka/run-cmake@v2
         id: runcmake
         with:
-          cmakeGenerator: 'Ninja'
-          cmakeListsOrSettingsJson: 'CMakeListsTxtBasic'
+          cmakeGenerator: 'UnixMakefiles'
+          cmakeListsOrSettingsJson: 'CMakeListsTxtAdvanced'
           cmakeListsTxtPath: '${{ github.workspace }}/CMakeLists.txt'
           useShell: bash
+          buildWithCMake: false
 #      - name: CMake
 #        run: cmake .
-#      - name: Make Engine
-#        run: make spring
+      - name: Make Engine
+        run: make spring
