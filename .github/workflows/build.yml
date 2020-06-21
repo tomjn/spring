@@ -54,7 +54,7 @@ jobs:
 #        run: cmake .
       - name: Make Engine
         run: "make spring"
-        working-directory: "${{ github.workspace }}/../../_temp"
+        working-directory: '${{ github.workspace }}/ghbuild'
       - uses: actions/upload-artifact@v2
         with:
           name: build folder
