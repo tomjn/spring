@@ -8,12 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-    matrix:
-      config:
-        - {
-          name: "Ubuntu Latest GCC", artifact: "Linux.tar.xz",
-          cc: "gcc", cxx: "g++"
-        }
+      matrix:
+        os: [ 'ubuntu' ]
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v2
