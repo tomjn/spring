@@ -47,4 +47,5 @@ jobs:
 #      - name: CMake
 #        run: cmake .
       - name: Make Engine
-        run: 'cd ${{Build.ArtifactStagingDirectory}} && make spring'
+        run: "make spring"
+        working-directory: "${{ github.workspace }}/../../_temp"
