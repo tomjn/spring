@@ -10,7 +10,6 @@ jobs:
       fail-fast: false
       matrix:
         os: [ 'ubuntu' ]
-        arch: [ '64' ]
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v2
@@ -20,6 +19,8 @@ jobs:
         uses: textbook/git-checkout-submodule-action@master
       - name: Apt Update
         run: sudo apt-get update
+      - name: Ensure build folder exists
+        run: mkdir -p ~/builds/${{ matrix.os }}-64/
       # - name: Add Mingw-64 Apt Repo
       #   run: sudo add-apt-repository ppa:tobydox/mingw-x-trusty
       # - name: Install Mingw dependencies
@@ -42,13 +43,13 @@ jobs:
       - uses: actions/cache@v2
         id: cache
         with:
-          path: '~/builds/${{ matrix.os }}-${{ matrix.arch }}'
-          key: ${{ matrix.os }}-${{ matrix.arch }}-${{ steps.get-date.outputs.date }}-${{ github.ref }}
+          path: '~/builds/${{ matrix.os }}-64'
+          key: ${{ matrix.os }}-64-${{ steps.get-date.outputs.date }}-${{ github.ref }}
       - name: Run CMake
         uses: lukka/run-cmake@v2
         id: runcmake
         with:
-          buildDirectory: '~/builds/${{ matrix.os }}-${{ matrix.arch }}'
+          buildDirectory: '~/builds/${{ matrix.os }}-64'
           cmakeGenerator: 'UnixMakefiles'
           cmakeListsOrSettingsJson: 'CMakeListsTxtAdvanced'
           cmakeListsTxtPath: '${{ github.workspace }}/CMakeLists.txt'
@@ -56,21 +57,21 @@ jobs:
           buildWithCMake: false
       - name: Make Engine
         run: "make spring"
-        working-directory: '~/builds/${{ matrix.os }}-${{ matrix.arch }}'
+        working-directory: '~/builds/${{ matrix.os }}-64'
       - name: Setup Artefact Folder
         run : |
-          mkdir -p /tmp/engine/${{ matrix.os }}-${{ matrix.arch }}
-          cd ~/builds/${{ matrix.os }}-${{ matrix.arch }}/
-          cp libunitsync.so /tmp/engine/${{ matrix.os }}-${{ matrix.arch }}
-          cp springsettings.cfg /tmp/engine/${{ matrix.os }}-${{ matrix.arch }}
-          cp spring /tmp/engine/${{ matrix.os }}-${{ matrix.arch }}
-          cp -rf base /tmp/engine/${{ matrix.os }}-${{ matrix.arch }}
-          cp -rf AI /tmp/engine/${{ matrix.os }}-${{ matrix.arch }}
-          cd /tmp/engine/${{ matrix.os }}-${{ matrix.arch }}
+          mkdir -p /tmp/engine/${{ matrix.os }}-64
+          cd ~/builds/${{ matrix.os }}-64/
+          cp libunitsync.so /tmp/engine/${{ matrix.os }}-64
+          cp springsettings.cfg /tmp/engine/${{ matrix.os }}-64
+          cp spring /tmp/engine/${{ matrix.os }}-64
+          cp -rf base /tmp/engine/${{ matrix.os }}-64
+          cp -rf AI /tmp/engine/${{ matrix.os }}-64
+          cd /tmp/engine/${{ matrix.os }}-64
           find . -name "CMakeFiles" -type d -exec rm -rf {} \;
           find . -name "cmake_install.cmake" -exec rm -rf {} \;
           find . -name "Makefile" -exec rm -rf {} \;
       - uses: actions/upload-artifact@v2
         with:
           name: ${{matrix.os}}-${{matrix.arch}}
-          path: '/tmp/engine/${{ matrix.os }}-${{ matrix.arch }}' # or path/to/artifact ${{ github.workspace }}/../..
+          path: '/tmp/engine/${{ matrix.os }}-64' # or path/to/artifact ${{ github.workspace }}/../..
