@@ -10,6 +10,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ 'ubuntu' ]
+        arch: [ '64' ]
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v2
@@ -33,31 +34,43 @@ jobs:
           libboost-program-options-dev libboost-signals-dev libopenal-dev 
           libboost-chrono-dev libboost-filesystem-dev libunwind8-dev 
           default-jdk libcurl4-gnutls-dev
-      - name: Setup cross-compile folders
-        run: mkdir -p /tmp/spring/${{ runner.os }}
+      - name: Get Date
+        id: get-date
+        run: |
+          echo "::set-output name=date::$(/bin/date -u "+%Y%v")"
+        shell: bash
       - uses: actions/cache@v2
         id: cache
         with:
-          path: '${{ github.workspace }}/ghbuild'
-          key: ${{ runner.os }}-${{ github.ref }}
+          path: '~/builds/${{ runner.os }}-${{ runner.arch }}'
+          key: ${{ runner.os }}-${{ runner.arch }}-${{ steps.get-date.outputs.date }}-${{ github.ref }}
       - name: Run CMake
         uses: lukka/run-cmake@v2
         id: runcmake
         with:
-          buildDirectory: '${{ github.workspace }}/ghbuild'
+          buildDirectory: '~/builds/${{ runner.os }}-${{ runner.arch }}'
           cmakeGenerator: 'UnixMakefiles'
           cmakeListsOrSettingsJson: 'CMakeListsTxtAdvanced'
           cmakeListsTxtPath: '${{ github.workspace }}/CMakeLists.txt'
           useShell: bash
           buildWithCMake: false
-          cmakeAppendedArgs: "-DCMAKE_INSTALL_PREFIX=/tmp/spring/${{ runner.os }}"
       - name: Make Engine
         run: "make spring"
-        working-directory: '${{ github.workspace }}/ghbuild'
-      - name: Install built spring to /tmp/spring/${{ runner.os }}
-        run: "make install"
-        working-directory: '${{ github.workspace }}/ghbuild'
+        working-directory: '~/builds/${{ runner.os }}-${{ runner.arch }}'
+      - name: Setup Artefact Folder
+        run : |
+          mkdir -p /tmp/engine/${{ runner.os }}-${{ runner.arch }}
+          cd ~/builds/${{ runner.os }}-${{ runner.arch }}/
+          cp libunitsync.so /tmp/engine/${{ runner.os }}-${{ runner.arch }}
+          cp springsettings.cfg /tmp/engine/${{ runner.os }}-${{ runner.arch }}
+          cp spring /tmp/engine/${{ runner.os }}-${{ runner.arch }}
+          cp -rf base /tmp/engine/${{ runner.os }}-${{ runner.arch }}
+          cp -rf AI /tmp/engine/${{ runner.os }}-${{ runner.arch }}
+          cd /tmp/engine/${{ runner.os }}-${{ runner.arch }}
+          find . -name "CMakeFiles" -type d -exec rm -rf {} \;
+          find . -name "cmake_install.cmake" -exec rm -rf {} \;
+          find . -name "Makefile" -exec rm -rf {} \;
       - uses: actions/upload-artifact@v2
         with:
           name: ${{runner.os}}
-          path: '/tmp/spring/${{ runner.os }}' # or path/to/artifact ${{ github.workspace }}/../..
+          path: '/tmp/engine/${{ runner.os }}-${{ runner.arch }}' # or path/to/artifact ${{ github.workspace }}/../..
