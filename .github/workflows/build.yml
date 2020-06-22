@@ -33,8 +33,8 @@ jobs:
           libboost-program-options-dev libboost-signals-dev libopenal-dev 
           libboost-chrono-dev libboost-filesystem-dev libunwind8-dev 
           default-jdk libcurl4-gnutls-dev
-      #- name: Setup cross-compile folders
-      #  run: mkdir -p ~/spring-xcompile/win64 ~/spring-xcompile/linux
+      - name: Setup cross-compile folders
+        run: mkdir -p /tmp/spring/${{ runner.os }}
       - uses: actions/cache@v2
         id: cache
         with:
@@ -50,12 +50,14 @@ jobs:
           cmakeListsTxtPath: '${{ github.workspace }}/CMakeLists.txt'
           useShell: bash
           buildWithCMake: false
-#      - name: CMake
-#        run: cmake .
+          cmakeAppendedArgs: "-DCMAKE_INSTALL_PREFIX=/tmp/spring/${{ runner.os }}"
       - name: Make Engine
         run: "make spring"
+        working-directory: '${{ github.workspace }}/ghbuild'
+      - name: Install built spring to /tmp/spring/${{ runner.os }}
+        run: "make install"
         working-directory: '${{ github.workspace }}/ghbuild'
       - uses: actions/upload-artifact@v2
         with:
           name: build folder
-          path: '${{ github.workspace }}/ghbuild' # or path/to/artifact ${{ github.workspace }}/../..
+          path: '/tmp/spring/${{ runner.os }}' # or path/to/artifact ${{ github.workspace }}/../..
