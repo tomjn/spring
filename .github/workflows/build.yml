@@ -37,18 +37,18 @@ jobs:
       - name: Get Date
         id: get-date
         run: |
-          echo "::set-output name=date::$(/bin/date -u "+%Y%v")"
+          echo "::set-output name=date::$(/bin/date -u "+%Y%V")"
         shell: bash
       - uses: actions/cache@v2
         id: cache
         with:
-          path: '~/builds/${{ runner.os }}-${{ runner.arch }}'
-          key: ${{ runner.os }}-${{ runner.arch }}-${{ steps.get-date.outputs.date }}-${{ github.ref }}
+          path: '~/builds/${{ matrix.os }}-${{ matrix.arch }}'
+          key: ${{ matrix.os }}-${{ matrix.arch }}-${{ steps.get-date.outputs.date }}-${{ github.ref }}
       - name: Run CMake
         uses: lukka/run-cmake@v2
         id: runcmake
         with:
-          buildDirectory: '~/builds/${{ runner.os }}-${{ runner.arch }}'
+          buildDirectory: '~/builds/${{ matrix.os }}-${{ matrix.arch }}'
           cmakeGenerator: 'UnixMakefiles'
           cmakeListsOrSettingsJson: 'CMakeListsTxtAdvanced'
           cmakeListsTxtPath: '${{ github.workspace }}/CMakeLists.txt'
@@ -56,21 +56,21 @@ jobs:
           buildWithCMake: false
       - name: Make Engine
         run: "make spring"
-        working-directory: '~/builds/${{ runner.os }}-${{ runner.arch }}'
+        working-directory: '~/builds/${{ matrix.os }}-${{ matrix.arch }}'
       - name: Setup Artefact Folder
         run : |
-          mkdir -p /tmp/engine/${{ runner.os }}-${{ runner.arch }}
-          cd ~/builds/${{ runner.os }}-${{ runner.arch }}/
-          cp libunitsync.so /tmp/engine/${{ runner.os }}-${{ runner.arch }}
-          cp springsettings.cfg /tmp/engine/${{ runner.os }}-${{ runner.arch }}
-          cp spring /tmp/engine/${{ runner.os }}-${{ runner.arch }}
-          cp -rf base /tmp/engine/${{ runner.os }}-${{ runner.arch }}
-          cp -rf AI /tmp/engine/${{ runner.os }}-${{ runner.arch }}
-          cd /tmp/engine/${{ runner.os }}-${{ runner.arch }}
+          mkdir -p /tmp/engine/${{ matrix.os }}-${{ matrix.arch }}
+          cd ~/builds/${{ matrix.os }}-${{ matrix.arch }}/
+          cp libunitsync.so /tmp/engine/${{ matrix.os }}-${{ matrix.arch }}
+          cp springsettings.cfg /tmp/engine/${{ matrix.os }}-${{ matrix.arch }}
+          cp spring /tmp/engine/${{ matrix.os }}-${{ matrix.arch }}
+          cp -rf base /tmp/engine/${{ matrix.os }}-${{ matrix.arch }}
+          cp -rf AI /tmp/engine/${{ matrix.os }}-${{ matrix.arch }}
+          cd /tmp/engine/${{ matrix.os }}-${{ matrix.arch }}
           find . -name "CMakeFiles" -type d -exec rm -rf {} \;
           find . -name "cmake_install.cmake" -exec rm -rf {} \;
           find . -name "Makefile" -exec rm -rf {} \;
       - uses: actions/upload-artifact@v2
         with:
-          name: ${{runner.os}}
-          path: '/tmp/engine/${{ runner.os }}-${{ runner.arch }}' # or path/to/artifact ${{ github.workspace }}/../..
+          name: ${{matrix.os}}-${{matrix.arch}}
+          path: '/tmp/engine/${{ matrix.os }}-${{ matrix.arch }}' # or path/to/artifact ${{ github.workspace }}/../..
