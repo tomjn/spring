@@ -61,16 +61,14 @@ jobs:
       - name: Setup Artefact Folder
         run : |
           mkdir -p /tmp/engine/${{ matrix.os }}-64
-          cd /tmp/builds/${{ matrix.os }}-64/
-          cp libunitsync.so /tmp/engine/${{ matrix.os }}-64
-          cp springsettings.cfg /tmp/engine/${{ matrix.os }}-64
-          cp spring /tmp/engine/${{ matrix.os }}-64
-          cp -rf base /tmp/engine/${{ matrix.os }}-64
-          cp -rf AI /tmp/engine/${{ matrix.os }}-64
-          cd /tmp/engine/${{ matrix.os }}-64
-          find . -name "CMakeFiles" -type d -exec rm -rf {} \;
-          find . -name "cmake_install.cmake" -type f -delete
-          find . -name "Makefile" -type f -delete
+          cp /tmp/builds/${{ matrix.os }}-64/libunitsync.so /tmp/engine/${{ matrix.os }}-64
+          cp /tmp/builds/${{ matrix.os }}-64/springsettings.cfg /tmp/engine/${{ matrix.os }}-64
+          cp /tmp/builds/${{ matrix.os }}-64/spring /tmp/engine/${{ matrix.os }}-64
+          cp -rf /tmp/builds/${{ matrix.os }}-64/base /tmp/engine/${{ matrix.os }}-64
+          cp -rf /tmp/builds/${{ matrix.os }}-64/AI /tmp/engine/${{ matrix.os }}-64
+          find /tmp/engine/${{ matrix.os }}-64/AI -name "CMakeFiles" -type d -exec rm -rf {} \;
+          find /tmp/engine/${{ matrix.os }}-64/AI -name "cmake_install.cmake" -type f -delete
+          find /tmp/engine/${{ matrix.os }}-64/AI -name "Makefile" -type f -delete
       - uses: actions/upload-artifact@v2
         with:
           name: ${{matrix.os}}-${{matrix.arch}}
