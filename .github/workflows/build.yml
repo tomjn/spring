@@ -65,10 +65,12 @@ jobs:
           cp /tmp/builds/${{ matrix.os }}-64/springsettings.cfg /tmp/engine/${{ matrix.os }}-64
           cp /tmp/builds/${{ matrix.os }}-64/spring /tmp/engine/${{ matrix.os }}-64
           cp -rf /tmp/builds/${{ matrix.os }}-64/base /tmp/engine/${{ matrix.os }}-64
-          cp -rf /tmp/builds/${{ matrix.os }}-64/AI /tmp/engine/${{ matrix.os }}-64
-          find /tmp/engine/${{ matrix.os }}-64/AI -name "CMakeFiles" -type d -exec rm -rf {} \;
-          find /tmp/engine/${{ matrix.os }}-64/AI -name "cmake_install.cmake" -type f -delete
-          find /tmp/engine/${{ matrix.os }}-64/AI -name "Makefile" -type f -delete
+          mkdir -p /tmp/engine/${{ matrix.os }}-64/AI/Interfaces /tmp/engine/${{ matrix.os }}-64/AI/Skirmish
+          cp -rf /tmp/builds/${{ matrix.os }}-64/AI/Interfaces /tmp/engine/${{ matrix.os }}-64/AI/Interfaces
+          cp -rf /tmp/builds/${{ matrix.os }}-64/AI/Skirmish /tmp/engine/${{ matrix.os }}-64/AI/Skirmish
+#          find /tmp/engine/${{ matrix.os }}-64/AI -name "CMakeFiles" -type d -exec rm -rf {} \;
+#          find /tmp/engine/${{ matrix.os }}-64/AI -name "cmake_install.cmake" -type f -delete
+#          find /tmp/engine/${{ matrix.os }}-64/AI -name "Makefile" -type f -delete
       - uses: actions/upload-artifact@v2
         with:
           name: ${{matrix.os}}-${{matrix.arch}}
