@@ -62,6 +62,12 @@ jobs:
         run : |
           mkdir -p /tmp/engine/${{ matrix.os }}-64
           cp -rf /tmp/builds/${{ matrix.os }}-64/* /tmp/engine/${{ matrix.os }}-64
+          rm -rf /tmp/engine/${{ matrix.os }}-64/CMake*
+          rm -rf /tmp/engine/${{ matrix.os }}-64/test/*
+          rm -rf /tmp/engine/${{ matrix.os }}-64/cont/*
+          rm -rf /tmp/engine/${{ matrix.os }}-64/doc/*
+          rm -rf /tmp/engine/${{ matrix.os }}-64/rts/*
+          rm -rf /tmp/engine/${{ matrix.os }}-64/src-generated/*
 #          cp /tmp/builds/${{ matrix.os }}-64/libunitsync.so /tmp/engine/${{ matrix.os }}-64
 #          cp /tmp/builds/${{ matrix.os }}-64/springsettings.cfg /tmp/engine/${{ matrix.os }}-64
 #          cp /tmp/builds/${{ matrix.os }}-64/spring /tmp/engine/${{ matrix.os }}-64
