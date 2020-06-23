@@ -35,7 +35,7 @@ jobs:
           libboost-program-options-dev libboost-signals-dev libopenal-dev 
           libboost-chrono-dev libboost-filesystem-dev libunwind8-dev 
           default-jdk libcurl4-gnutls-dev binutils-gold
-      - name: Get Date
+      - name: Get Cache Date
         id: get-date
         run: |
           echo "::set-output name=date::$(/bin/date -u "+%Y%V")"
@@ -55,23 +55,24 @@ jobs:
           cmakeListsTxtPath: '${{ github.workspace }}/CMakeLists.txt'
           useShell: bash
           buildWithCMake: false
-      - name: Make Engine
-        run: "make spring -j4"
+      - name: Build Artefacts
+        run: "make all -j4"
         working-directory: '/tmp/builds/${{ matrix.os }}-64'
       - name: Setup Artefact Folder
         run : |
           mkdir -p /tmp/engine/${{ matrix.os }}-64
-          cp /tmp/builds/${{ matrix.os }}-64/libunitsync.so /tmp/engine/${{ matrix.os }}-64
-          cp /tmp/builds/${{ matrix.os }}-64/springsettings.cfg /tmp/engine/${{ matrix.os }}-64
-          cp /tmp/builds/${{ matrix.os }}-64/spring /tmp/engine/${{ matrix.os }}-64
-          cp -rf /tmp/builds/${{ matrix.os }}-64/base /tmp/engine/${{ matrix.os }}-64
-          mkdir -p /tmp/engine/${{ matrix.os }}-64/AI/Interfaces /tmp/engine/${{ matrix.os }}-64/AI/Skirmish
-          cp -rf /tmp/builds/${{ matrix.os }}-64/AI/Interfaces /tmp/engine/${{ matrix.os }}-64/AI/Interfaces
-          cp -rf /tmp/builds/${{ matrix.os }}-64/AI/Skirmish /tmp/engine/${{ matrix.os }}-64/AI/Skirmish
+          cp -rf /tmp/builds/${{ matrix.os }}-64/* /tmp/engine/${{ matrix.os }}-64
+#          cp /tmp/builds/${{ matrix.os }}-64/libunitsync.so /tmp/engine/${{ matrix.os }}-64
+#          cp /tmp/builds/${{ matrix.os }}-64/springsettings.cfg /tmp/engine/${{ matrix.os }}-64
+#          cp /tmp/builds/${{ matrix.os }}-64/spring /tmp/engine/${{ matrix.os }}-64
+#          cp -rf /tmp/builds/${{ matrix.os }}-64/base /tmp/engine/${{ matrix.os }}-64
+#          mkdir -p /tmp/engine/${{ matrix.os }}-64/AI/Interfaces /tmp/engine/${{ matrix.os }}-64/AI/Skirmish
+#          cp -rf /tmp/builds/${{ matrix.os }}-64/AI/Interfaces /tmp/engine/${{ matrix.os }}-64/AI/Interfaces
+#          cp -rf /tmp/builds/${{ matrix.os }}-64/AI/Skirmish /tmp/engine/${{ matrix.os }}-64/AI/Skirmish
 #          find /tmp/engine/${{ matrix.os }}-64/AI -name "CMakeFiles" -type d -exec rm -rf {} \;
 #          find /tmp/engine/${{ matrix.os }}-64/AI -name "cmake_install.cmake" -type f -delete
 #          find /tmp/engine/${{ matrix.os }}-64/AI -name "Makefile" -type f -delete
       - uses: actions/upload-artifact@v2
         with:
-          name: ${{matrix.os}}-${{matrix.arch}}
+          name: ${{matrix.os}}-64.zip
           path: '/tmp/engine/${{ matrix.os }}-64' # or path/to/artifact ${{ github.workspace }}/../..
