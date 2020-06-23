@@ -20,7 +20,7 @@ jobs:
       - name: Apt Update
         run: sudo apt-get update
       - name: Ensure build folder exists
-        run: mkdir -p ~/builds/${{ matrix.os }}-64/
+        run: mkdir -p /tmp/builds/${{ matrix.os }}-64/
       # - name: Add Mingw-64 Apt Repo
       #   run: sudo add-apt-repository ppa:tobydox/mingw-x-trusty
       # - name: Install Mingw dependencies
@@ -34,7 +34,7 @@ jobs:
           libboost-thread-dev libboost-regex-dev libboost-system-dev 
           libboost-program-options-dev libboost-signals-dev libopenal-dev 
           libboost-chrono-dev libboost-filesystem-dev libunwind8-dev 
-          default-jdk libcurl4-gnutls-dev
+          default-jdk libcurl4-gnutls-dev binutils-gold
       - name: Get Date
         id: get-date
         run: |
@@ -43,25 +43,25 @@ jobs:
       - uses: actions/cache@v2
         id: cache
         with:
-          path: '~/builds/${{ matrix.os }}-64'
+          path: '/tmp/builds/${{ matrix.os }}-64'
           key: ${{ matrix.os }}-64-${{ steps.get-date.outputs.date }}-${{ github.ref }}
       - name: Run CMake
         uses: lukka/run-cmake@v2
         id: runcmake
         with:
-          buildDirectory: '~/builds/${{ matrix.os }}-64'
+          buildDirectory: '/tmp/builds/${{ matrix.os }}-64'
           cmakeGenerator: 'UnixMakefiles'
           cmakeListsOrSettingsJson: 'CMakeListsTxtAdvanced'
           cmakeListsTxtPath: '${{ github.workspace }}/CMakeLists.txt'
           useShell: bash
           buildWithCMake: false
       - name: Make Engine
-        run: "make spring"
-        working-directory: '~/builds/${{ matrix.os }}-64'
+        run: "make spring -j4"
+        working-directory: '/tmp/builds/${{ matrix.os }}-64'
       - name: Setup Artefact Folder
         run : |
           mkdir -p /tmp/engine/${{ matrix.os }}-64
-          cd ~/builds/${{ matrix.os }}-64/
+          cd /tmp/builds/${{ matrix.os }}-64/
           cp libunitsync.so /tmp/engine/${{ matrix.os }}-64
           cp springsettings.cfg /tmp/engine/${{ matrix.os }}-64
           cp spring /tmp/engine/${{ matrix.os }}-64
