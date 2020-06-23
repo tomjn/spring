@@ -34,7 +34,7 @@ jobs:
           libboost-thread-dev libboost-regex-dev libboost-system-dev 
           libboost-program-options-dev libboost-signals-dev libopenal-dev 
           libboost-chrono-dev libboost-filesystem-dev libunwind8-dev 
-          default-jdk libcurl4-gnutls-dev binutils-gold
+          default-jdk libcurl4-openssl-dev binutils-gold
       - name: Get Cache Date
         id: get-date
         run: |
