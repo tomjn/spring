@@ -68,9 +68,9 @@ jobs:
           cp -rf base /tmp/engine/${{ matrix.os }}-64
           cp -rf AI /tmp/engine/${{ matrix.os }}-64
           cd /tmp/engine/${{ matrix.os }}-64
-          find . -name "CMakeFiles" -type d -exec rm -rf {} \;
-          find . -name "cmake_install.cmake" -exec rm -rf {} \;
-          find . -name "Makefile" -exec rm -rf {} \;
+          find . -name "CMakeFiles" -type d -delete
+          find . -name "cmake_install.cmake" -type f -delete
+          find . -name "Makefile" -type f -delete
       - uses: actions/upload-artifact@v2
         with:
           name: ${{matrix.os}}-${{matrix.arch}}
